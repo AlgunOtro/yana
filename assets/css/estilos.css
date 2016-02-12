@@ -1,0 +1,20 @@
+* {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.header, .footer{
+	margin:0px 0px 0px 0px;
+	font-style: normal;
+	font-variant: normal;
+	white-space: nowrap;
+	word-wrap: normal;
+	overflow: hidden;
+}
+.header{
+	background:#D5ECF0;
+	padding:0px 0px 0px 50px;
+	font-size: 33px;
+}
+.footer{
+	padding:10px 0px 0px 10px;
+	font-size: 12px;
+}
