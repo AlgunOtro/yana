@@ -18,8 +18,16 @@ class Edatagrid extends CI_Controller {
 	 *@return void
 	 */
 	function obtener_data() {
-		$resultado = array('total' => 2, 'rows' => array( array('id' => '1','nombre' => 'Alguien','ci_ruc' => '0000000000','telefono' => '0000000000','direccion' => 'Algún sitio'),array('id' => '2','nombre' => 'Alguien Más','ci_ruc' => '0000000000','telefono' => '0000000000','direccion' => 'Otro sitio') ) );
-		echo json_encode($resultado);
+		$this->load->model('tabla_model');
+		$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+		$rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+		$offset = ($page-1)*$rows;
+		$sort = isset($_POST['sort']) ? strval($_POST['sort']) : 'id';
+		$order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
+		$result = array();
+		$result["total"] = $this->tabla_model->num_registros();
+		$result["rows"] = $this->tabla_model->obtener_todo();
+		echo json_encode($result);
 	}
 
 	/**
@@ -32,6 +40,24 @@ class Edatagrid extends CI_Controller {
 		$this->load->view('plantilla/cabecera');
 		$this->load->view('edatagrid');
 		$this->load->view('plantilla/pie');
+	}
+
+	/**
+	 * Guardar datos
+	 *
+	 * @return void
+	 */
+	function guardar_data() {
+		$this->load->model('tabla_model');
+		if( $this->tabla_model->guardar() ) {
+			$resultado = array('success' => true);
+		} else {
+			$resultado = array(
+				'isError' => true,
+				'message' => 'ERROR: No se guardaron los datos.'
+				);
+		}
+		echo json_encode($resultado);
 	}
 }
 
