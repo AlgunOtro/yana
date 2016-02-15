@@ -5,7 +5,7 @@ class Edatagrid extends CI_Controller {
 	/**
 	 * Controlador Edatagrid
 	 *
-	 * @author Byron Oña byr_070@hotmail.com
+	 * @author Byron Oña
 	 */
 	public function index() {
 		redirect('edatagrid/ver');

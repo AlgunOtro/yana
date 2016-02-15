@@ -6,7 +6,7 @@
  * - user account data,
  * - user profiles
  *
- * @package	Tank_auth
+ * @package	Yana
  * @author	Byron Oña
  */
 class Tabla_model extends CI_Model

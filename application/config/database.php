@@ -51,7 +51,7 @@ $active_record = TRUE;
 $db['desarrollo']['hostname'] = 'localhost';
 $db['desarrollo']['username'] = 'root';
 $db['desarrollo']['password'] = 'toor';
-$db['desarrollo']['database'] = 'bd_jeasyui';
+$db['desarrollo']['database'] = 'bd_des_yana';
 $db['desarrollo']['dbdriver'] = 'mysqli';
 $db['desarrollo']['dbprefix'] = '';
 $db['desarrollo']['pconnect'] = TRUE;
@@ -64,6 +64,53 @@ $db['desarrollo']['swap_pre'] = '';
 $db['desarrollo']['autoinit'] = TRUE;
 $db['desarrollo']['stricton'] = FALSE;
 
+$db['pruebas']['hostname'] = 'localhost';
+$db['pruebas']['username'] = 'root';
+$db['pruebas']['password'] = 'toor';
+$db['pruebas']['database'] = 'bd_test_yana';
+$db['pruebas']['dbdriver'] = 'mysqli';
+$db['pruebas']['dbprefix'] = '';
+$db['pruebas']['pconnect'] = TRUE;
+$db['pruebas']['db_debug'] = TRUE;
+$db['pruebas']['cache_on'] = FALSE;
+$db['pruebas']['cachedir'] = '';
+$db['pruebas']['char_set'] = 'utf8';
+$db['pruebas']['dbcollat'] = 'utf8_general_ci';
+$db['pruebas']['swap_pre'] = '';
+$db['pruebas']['autoinit'] = TRUE;
+$db['pruebas']['stricton'] = FALSE;
+
+$db['preproduccion']['hostname'] = 'localhost';
+$db['preproduccion']['username'] = 'root';
+$db['preproduccion']['password'] = 'toor';
+$db['preproduccion']['database'] = 'bd_pre_yana';
+$db['preproduccion']['dbdriver'] = 'mysqli';
+$db['preproduccion']['dbprefix'] = '';
+$db['preproduccion']['pconnect'] = TRUE;
+$db['preproduccion']['db_debug'] = TRUE;
+$db['preproduccion']['cache_on'] = FALSE;
+$db['preproduccion']['cachedir'] = '';
+$db['preproduccion']['char_set'] = 'utf8';
+$db['preproduccion']['dbcollat'] = 'utf8_general_ci';
+$db['preproduccion']['swap_pre'] = '';
+$db['preproduccion']['autoinit'] = TRUE;
+$db['preproduccion']['stricton'] = FALSE;
+
+$db['produccion']['hostname'] = 'localhost';
+$db['produccion']['username'] = 'root';
+$db['produccion']['password'] = 'toor';
+$db['produccion']['database'] = 'bd_prod_yana';
+$db['produccion']['dbdriver'] = 'mysqli';
+$db['produccion']['dbprefix'] = '';
+$db['produccion']['pconnect'] = TRUE;
+$db['produccion']['db_debug'] = TRUE;
+$db['produccion']['cache_on'] = FALSE;
+$db['produccion']['cachedir'] = '';
+$db['produccion']['char_set'] = 'utf8';
+$db['produccion']['dbcollat'] = 'utf8_general_ci';
+$db['produccion']['swap_pre'] = '';
+$db['produccion']['autoinit'] = TRUE;
+$db['produccion']['stricton'] = FALSE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

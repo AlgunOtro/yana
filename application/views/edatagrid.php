@@ -1,4 +1,4 @@
-	<table id="dg" style="width:auto;height:200px" class="easyui-edatagrid" data-options="url: 'obtener_data',saveUrl: 'guardar_data',updateUrl: 'actualizar_data',destroyUrl: 'eliminar_data',autoSave:true, onBeforeEdit:function(index,row){ row.editing = true; updateActions(index); }, onAfterEdit:function(index,row){ row.editing = false; updateActions(index); }, onCancelEdit:function(index,row){ row.editing = false; updateActions(index); },onError: function(index,row){ alert(row.message); },onSuccess:function(index,row) { $('#dg').datagrid('reload'); },title:'Datagrid Editable',fit:'true',singleSelect:'true',idField:'id',toolbar:'#toolbar'">
+	<table id="dg" style="width:auto;height:200px" class="easyui-edatagrid" data-options="url: 'obtener_data',saveUrl: 'guardar_data',updateUrl: 'actualizar_data',destroyUrl: 'eliminar_data',autoSave:true, onBeforeEdit:function(index,row){ row.editing = true; updateActions(index); }, onAfterEdit:function(index,row){ row.editing = false; updateActions(index); }, onCancelEdit:function(index,row){ row.editing = false; updateActions(index); },onError: function(index,row){ alert(row.message); },onSuccess:function(index,row) { $('#dg').edatagrid('reload'); },title:'Datagrid Editable',fit:'true',singleSelect:'true',idField:'id',toolbar:'#toolbar'">
 		<thead>
 			<tr>
 				<th field="col1" width="250" editor="text">Col 1</th>
@@ -11,7 +11,7 @@
 		</thead>
 	</table>
 	<div id="toolbar">  
-		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dg').edatagrid('addRow')"></a>  
-		<a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dg').edatagrid('cancelRow')"></a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dg').edatagrid('addRow');"></a>  
+		<a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dg').edatagrid('cancelRow');"></a>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-help" plain="true" onclick="javascript:alert('ayuda')"></a>  
 	</div>

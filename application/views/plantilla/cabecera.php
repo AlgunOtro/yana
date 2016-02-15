@@ -21,5 +21,6 @@
     <div data-options="region:'west',hideCollapsedContent:false" class="Menu" title="Menú" style="width:100px;">
         <a id="btn" style="width:100%" href="<?php echo base_url();?>" class="easyui-linkbutton">Inicio</a>
         <a id="btn" style="width:100%" href="<?php echo base_url('edatagrid');?>" class="easyui-linkbutton">Edatagrid</a>
+        <a id="btn" style="width:100%" href="<?php echo base_url('subgrid');?>" class="easyui-linkbutton">Subgrid</a>
     </div>
     <div class="principal" data-options="region:'center'" style="padding:4px;">
