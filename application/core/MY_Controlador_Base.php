@@ -48,7 +48,6 @@ class MY_Controlador_Base extends CI_Controller {
      * @return void
      */
     function guardar_data() {
-        var_dump('Controlador_Base - guardar_data');
         $modelo = 'maestro_model';
         //$modelo = $this->router->class.'_model';
         $this->load->model($modelo);
@@ -57,7 +56,7 @@ class MY_Controlador_Base extends CI_Controller {
         } else{
             $resultado = array(
                 'isError' => TRUE,
-                'message' => 'ERROR: No se guardaron los datos.'
+                'message' => 'No se guardaron los datos.'
             );
         }
         echo json_encode($resultado);
@@ -69,11 +68,18 @@ class MY_Controlador_Base extends CI_Controller {
      * @return void
      */
     function actualizar_data() {
-        $modelo = 'maestro_model';
+         $modelo = 'maestro_model';
         //$modelo = $this->router->class.'_model';
         $this->load->model($modelo);
-        $this->$modelo->actualizar_data();
-        $resultado = array('success'=>'true');
+
+        if( $this->$modelo->actualizar() ) {
+            $resultado = array('success' => TRUE);
+        } else{
+            $resultado = array(
+                'isError' => TRUE,
+                'message' => 'No se guardaron los datos.'
+            );
+        }
         echo json_encode($resultado);
     }
 }

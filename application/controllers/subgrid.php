@@ -11,17 +11,6 @@ class Subgrid extends MY_Controlador_Base {
 	function __construct(){
 		parent::__construct();
 	}
-
-	/**
-     * Llama a la vista desde la que se cargan los datos.
-     *
-     * @return void
-     */
-	function listar() {
-        $this->load->view('plantilla/cabecera');
-		$this->load->view('test_view');
-        $this->load->view('plantilla/pie');
-	}
 }
 
 /* End of file subgrid.php */

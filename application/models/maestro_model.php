@@ -21,9 +21,9 @@ class Maestro_model extends MY_Modelo_Base {
 	 * @return	object
 	 */
 	function insertar() {
-		$col_text_10 = isset($_POST['col_text_10']) ? strval($_POST['col_text_10']) : 'QQQQ';
-		$col_int = isset($_POST['col_int']) ? intval($_POST['col_int']) : 10;
-		$col_double = isset($_POST['col_double']) ? doubleval($_POST['col_double']) : 646;
+		$col_text_10 = isset($_POST['col_text_10']) ? strval($this->security->xss_clean($_POST['col_text_10'])) : '';
+		$col_int = isset($_POST['col_int']) ? intval($this->security->xss_clean($_POST['col_int'])) : 0;
+		$col_double = isset($_POST['col_double']) ? doubleval($this->security->xss_clean($_POST['col_double'])) : 0;
 
 		$data = array(
 			'col_text_10' => $col_text_10,
@@ -31,7 +31,6 @@ class Maestro_model extends MY_Modelo_Base {
 			'col_double' => $col_double
 		);
 		$resultado = $this->db->insert($this->nombre_tabla, $data);
-		var_dump($this->db->last_query());
 		return $resultado;
 	}
 
@@ -41,20 +40,18 @@ class Maestro_model extends MY_Modelo_Base {
 	 * @return	object
 	 */
 	function actualizar() {
-		$id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-		$nombre = isset($_POST['nombre']) ? strval($_POST['nombre']) : '';
-		$telefono = isset($_POST['telefono']) ? strval($_POST['telefono']) : '';
-		$direccion = isset($_POST['direccion']) ? strval($_POST['direccion']) : '';
-		$ci_ruc = isset($_POST['ci_ruc']) ? strval($_POST['ci_ruc']) : '';
+		$id = isset($_POST['id']) ? intval($this->security->xss_clean($_POST['id'])) : 0;
+		$col_text_10 = isset($_POST['col_text_10']) ? strval($this->security->xss_clean($_POST['col_text_10'])) : '';
+		$col_int = isset($_POST['col_int']) ? intval($this->security->xss_clean($_POST['col_int'])) : 0;
+		$col_double = isset($_POST['col_double']) ? doubleval($this->security->xss_clean($_POST['col_double'])) : 0;
 
 		$data = array(
-			'nombre' => $nombre,
-			'telefono' => $telefono,
-			'direccion' => $direccion,
-			'ci_ruc' => $ci_ruc
+			'col_text_10' => $col_text_10,
+			'col_int' => $col_int,
+			'col_double' => $col_double
 		);
 		$this->db->where('id', $id);
-		$resultado = $this->db->update($this->nombre_tabla, $data); 
+		$resultado = $this->db->update($this->nombre_tabla, $data);
 		return $resultado;
 	}
 }
