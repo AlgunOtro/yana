@@ -1,16 +1,18 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Maestro
+ * Detalle
  *
  * This model represents user authentication data. It operates the following tables:
- * - user account data,
- * - user profiles
+ * - detalle,
+ * - maestro
  *
  * @package	Yana
  * @author	Byron Oña
  */
-class Maestro_model extends MY_Modelo_Base {
+class Detalle_model extends MY_Modelo_Base {
 
+	public $nombre_tabla = 'detalle';
+	
 	function __construct() {
 		parent::__construct();
 	}
@@ -66,7 +68,19 @@ class Maestro_model extends MY_Modelo_Base {
 		$resultado = $this->db->delete($this->nombre_tabla);
 		return $resultado;
 	}
+
+	/**
+	 * Obtiene todos los registros.
+	 *
+	 * @return	object
+	 */
+	function obtener() {
+		$maestro_id = isset($_POST['id']) ? intval($this->security->xss_clean($_POST['id'])) : 0;
+		$this->db->from($this->nombre_tabla)->where('maestro_id',$maestro_id);
+		$resultado = $this->db->get();
+		return $resultado->result_array();
+	}
 }
 
-/* End of file maestro_model.php */
-/* Location: ./application/models/maestro_model.php */
+/* End of file detalle_model.php */
+/* Location: ./application/models/detalle_model.php */

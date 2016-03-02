@@ -11,7 +11,7 @@ class MY_Modelo_Base extends CI_Model {
 
 	function __construct() {
 		parent::__construct();
-		$ci =& get_instance();
+		//$ci =& get_instance();
 		//$this->nombre_tabla = $ci->config->item('db_table_prefix', 'tank_auth').$this->nombre_tabla;
 	}
 

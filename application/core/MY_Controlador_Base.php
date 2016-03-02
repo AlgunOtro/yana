@@ -82,6 +82,27 @@ class MY_Controlador_Base extends CI_Controller {
         }
         echo json_encode($resultado);
     }
+
+    /**
+     * Elimina en la BD el registro respectivo
+     * 
+     * @return void
+     */
+    function eliminar_data() {
+         $modelo = 'maestro_model';
+        //$modelo = $this->router->class.'_model';
+        $this->load->model($modelo);
+
+        if( $this->$modelo->eliminar() ) {
+            $resultado = array('success' => TRUE);
+        } else{
+            $resultado = array(
+                'isError' => TRUE,
+                'message' => 'No se guardaron los datos.'
+            );
+        }
+        echo json_encode($resultado);
+    }
 }
 
 /* End of file MY_Controlador_Base.php */
