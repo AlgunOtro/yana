@@ -23,14 +23,19 @@ class Detalle_model extends MY_Modelo_Base {
 	 * @return	object
 	 */
 	function insertar() {
-		$col_text_10 = isset($_POST['col_text_10']) ? strval($this->security->xss_clean($_POST['col_text_10'])) : '';
-		$col_int = isset($_POST['col_int']) ? intval($this->security->xss_clean($_POST['col_int'])) : 0;
-		$col_double = isset($_POST['col_double']) ? doubleval($this->security->xss_clean($_POST['col_double'])) : 0;
-
+		$col_date = isset($_POST['col_date']) ? strval($this->security->xss_clean($_POST['col_date'])) : NULL;
+		$col_datetime = isset($_POST['col_datetime']) ? strval($this->security->xss_clean($_POST['col_datetime'])) : NULL;
+		$maestro_id = isset($_POST['maestro_id']) ? intval($this->security->xss_clean($_POST['maestro_id'])) : NULL;
+		$format = 'm/d/Y';
+		$col_date = date_create_from_format( $format , $col_date );
+		$col_date = $col_date->format('Y-m-d');
+		$format = 'm/d/Y H:i:s';
+		$col_datetime = date_create_from_format( $format , $col_datetime );
+		$col_datetime = $col_datetime->format('Y-m-d H:i:s');
 		$data = array(
-			'col_text_10' => $col_text_10,
-			'col_int' => $col_int,
-			'col_double' => $col_double
+			'col_date' => $col_date,
+			'col_datetime' => $col_datetime,
+			'maestro_id' => $maestro_id
 		);
 		$resultado = $this->db->insert($this->nombre_tabla, $data);
 		return $resultado;
@@ -43,14 +48,14 @@ class Detalle_model extends MY_Modelo_Base {
 	 */
 	function actualizar() {
 		$id = isset($_POST['id']) ? intval($this->security->xss_clean($_POST['id'])) : 0;
-		$col_text_10 = isset($_POST['col_text_10']) ? strval($this->security->xss_clean($_POST['col_text_10'])) : '';
-		$col_int = isset($_POST['col_int']) ? intval($this->security->xss_clean($_POST['col_int'])) : 0;
-		$col_double = isset($_POST['col_double']) ? doubleval($this->security->xss_clean($_POST['col_double'])) : 0;
+		$col_date = isset($_POST['col_date']) ? strval($this->security->xss_clean($_POST['col_date'])) : NULL;
+		$col_datetime = isset($_POST['col_datetime']) ? strval($this->security->xss_clean($_POST['col_datetime'])) : NULL;
+		$maestro_id = isset($_POST['maestro_id']) ? intval($this->security->xss_clean($_POST['maestro_id'])) : NULL;
 
 		$data = array(
-			'col_text_10' => $col_text_10,
-			'col_int' => $col_int,
-			'col_double' => $col_double
+			'col_date' => $col_date,
+			'col_datetime' => $col_datetime,
+			'maestro_id' => $maestro_id
 		);
 		$this->db->where('id', $id);
 		$resultado = $this->db->update($this->nombre_tabla, $data);
