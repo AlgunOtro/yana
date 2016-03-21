@@ -1,4 +1,4 @@
-	<table id="dg" style="width:auto;height:100%" class="easyui-edatagrid" data-options="
+	<table id="dg" style="width:auto;" class="easyui-edatagrid" data-options="
 		title:'Subgrid Editable',
 		url:'obtener_data',
 		saveUrl:'guardar_data',
