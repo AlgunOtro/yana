@@ -15,6 +15,7 @@ class Roles_model extends CI_Model {
 
     function __construct() {
         parent::__construct();
+        log_message('debug', 'Clase Modelo Roles Iniciado');
     }
 
     /**
@@ -26,7 +27,7 @@ class Roles_model extends CI_Model {
         /*$query = $this->db->query("SELECT T0.ID,T0.DESCRIPCION ROL,T0.ESTADO FROM ".$this->table_name_roles." T0 ORDER BY T0.ID");
         return $query->result_array();*/
         $this->db->from($this->table_name_roles);
-        $resultado = $this->db->get();
+        $resultado = $this->db->get('',$this->limit, $this->offset);
         return $resultado->result_array();
     }
 

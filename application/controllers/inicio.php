@@ -9,13 +9,16 @@ class Inicio extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
+		log_message('debug', 'Clase Controlador Inicio Iniciado');
 		$this->load->library('form_validation');
 		$this->load->library('security');
+		$this->load->library('tank_auth');
 		$this->lang->load('form_validation','spanish');
 		$this->lang->load('bussing','spanish');
+		$this->lang->load('tank_auth','spanish');
+		$this->load->model('inicio/permiso_acceso');
 		$this->config->load('sigep');
 		$this->config->load('inicio');
-		$this->load->model('inicio/permiso_acceso');
 	}
 
 	/**
@@ -78,7 +81,6 @@ class Inicio extends CI_Controller {
 			$data = array_merge($data,$menu);
 
 			$this->load->view('plantilla/cabecera',$data);
-			$this->load->view('plantilla/principal');
 			$this->load->view('plantilla/pie');
 		} else {
 			redirect('inicio');
@@ -104,58 +106,73 @@ class Inicio extends CI_Controller {
 	 * @return	bool
 	 */
 	function _check_ad($password) {
-		if(1){
-			return TRUE;
-		}
-		//var_dump('sin dios');
-		//Datos servidor LDAP
-		$host = 'cotopaxi';
-		$domain = 'quiport.com';
-		$basedn = 'dc=quiport,dc=com';
-		//Limpiar código XSS de campo usuario
-		if($login = $this->input->post('nombre')){
-			$login = $this->security->xss_clean($login);
-		} else {
-			$login = '';
-		}
-		//Recuperar datos del formulario
-		$user = strtolower($login);
-		//Conectar a LDAP
-		$ad = ldap_connect("ldap://{$host}.{$domain}") or die('No se puede conectar al servidor LDAP.');
-		//Configurar la versión de protocolo
-		ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
-		ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
-		//Variables de sesión para controlar intentos fallidos
-		if($this->session->userdata('username')!=$user) {
-			$this->session->set_userdata(array(
-				'intentos'	=> 1
-				));
-		}
-		$this->session->set_userdata(array(
-			'username'	=> $user,
-			));
-		//Bind al servidor
-		if(@ldap_bind($ad, "quiport\\{$user}", $password)) {
-			//Vinculación exitosa a Active Directory
-			if( $res = $this->_limpiar_intentos($user) ) {
-				return TRUE;
+
+		if( $this->config->item("tiene_directorio_activo") ){
+			//Datos servidor LDAP
+			$host = $this->config->item("ad_host");
+			$domain = $this->config->item("ad_domain");
+			$subdomain = $this->config->item("ad_subdomain");
+			//Limpiar código XSS de campo usuario
+			if($login = $this->input->post('nombre')){
+				$login = $this->security->xss_clean($login);
 			} else {
+				$login = '';
+			}
+			//Recuperar datos del formulario
+			$user = strtolower($login);
+			//Conectar a LDAP
+			$ad = ldap_connect("ldap://{$host}.{$domain}.{$subdomain}") or die('No se puede conectar al servidor LDAP.');
+			//Configurar la versión de protocolo
+			ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
+			ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
+			//Variables de sesión para controlar intentos fallidos
+			if($this->session->userdata('username')!=$user) {
+				$this->session->set_userdata(array(
+					'intentos'	=> 1
+					));
+			}
+			$this->session->set_userdata(array(
+				'username'	=> $user,
+				));
+			//Bind al servidor
+			if(@ldap_bind($ad, "{$domain}\\{$user}", $password)) {
+			//Vinculación exitosa a Active Directory
+				if( $res = $this->_limpiar_intentos($user) ) {
+					return TRUE;
+				} else {
+					return FALSE;
+				}
+			} else {
+	   		//No se puede vincular a Active Directory
+				if( $this->_maxima_cantidad_intentos($user) ) {
+					$this->form_validation->set_message('_check_ad', 'Usuario bloqueado.');
+				} else {
+					$this->_incrementar_intento($user);
+					$num_intentos = $this->_obtener_cantidad_intentos($user);
+					$this->session->set_userdata(array(
+						'intentos'	=> $num_intentos
+						));
+					$this->form_validation->set_message('_check_ad', 'Usuario o clave inválidos. Intento '.$num_intentos);
+				}
 				return FALSE;
 			}
 		} else {
-	   		//No se puede vincular a Active Directory
-			if( $this->_maxima_cantidad_intentos($user) ) {
-				$this->form_validation->set_message('_check_ad', 'Usuario bloqueado.');
-			} else {
-				$this->_incrementar_intento($user);
-				$num_intentos = $this->_obtener_cantidad_intentos($user);
-				$this->session->set_userdata(array(
-					'intentos'	=> $num_intentos
-					));
-				$this->form_validation->set_message('_check_ad', 'Usuario o clave inválidos. Intento '.$num_intentos);
+			if ($this->tank_auth->is_logged_in()) {									// logged in
+				return TRUE;
 			}
-			return FALSE;
+			$usuario = $this->input->post('nombre');
+			$clave = $this->input->post('clave');
+			$data['login_by_username'] = ($this->config->item('login_by_username', 'tank_auth') AND
+				$this->config->item('use_username', 'tank_auth'));
+			$data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
+			if ( $this->tank_auth->login($usuario,$clave,FALSE,$data['login_by_username'],$data['login_by_email']) ) {
+				return TRUE;
+			} else {
+				$this->form_validation->set_message('_check_ad', 'Usuario o clave inválidos.');
+				return FALSE;
+			}
 		}
+		
 	}
 
 	/**
@@ -202,6 +219,15 @@ class Inicio extends CI_Controller {
 		$direccion_ip = $this->session->userdata('ip_address');
 		$this->load->model('inicio/intentos_acceso');
 		return $this->intentos_acceso->obtener_cantidad_intentos($direccion_ip,$user);
+	}
+
+	function _crear_usuario()
+	{
+		$username = 'admin';
+		$email = 'admin@root.org';
+		$password = 'toor';
+		$email_activation = FALSE;
+		var_dump( $this->tank_auth->create_user($username, $email, $password, $email_activation) );
 	}
 }
 

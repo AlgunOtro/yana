@@ -20,7 +20,7 @@ class Permiso_acceso extends CI_Model
 
 	function __construct() {
 		parent::__construct();
-
+		log_message('debug', 'Clase Modelo Permiso_acceso Iniciado');
 		$ci =& get_instance();
 		$this->table_name_usuarios = $ci->config->item('db_table_prefix', 'tank_auth').$this->table_name_usuarios;
 	}

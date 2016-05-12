@@ -1,42 +1,33 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-class MY_Controlador_Base extends CI_Controller {
-	/**
-     * Controlador Base
+class Elementos extends MY_Controlador_Base
+{
+    /**
+     * Elementos
      *
      * @author Byron Oña
      */
-	private $tiene_acceso = NULL;
-    private $modelo = NULL;
+    public $modelo = '';
 
-	public function __construct(){
-		parent::__construct();
-        $this->modelo = $this->router->class.'_model';
+    public function __construct()
+    {
+        parent::__construct();
+        log_message('debug', 'Controlador Elemento Iniciado');
+        $this->modelo = 'elementos_model';
         $this->load->model('proyectos/'.$this->modelo);
-	}
-
-    function index() {
-        redirect($this->router->class.'/listar');
     }
 
-    
+    function index()
+    {
+        redirect($this->router->class.'/editar');
+    }
 
-	/**
+    /**
      * Llama a la vista desde la que se cargan los datos.
      *
      * @return void
      */
-	function listar() {
-        $this->load->view('plantilla/cabecera');
-		$this->load->view($this->router->class.'_view');
-        $this->load->view('plantilla/pie');
-	}
-
-    /**
-     * Recupera desde la BD los datos existentes en formato JSON
-     * 
-     * @return void
-     */
-    function obtener_data() {
+    function editar()
+    {
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
         $offset = ($page-1)*$rows;
@@ -44,13 +35,31 @@ class MY_Controlador_Base extends CI_Controller {
         $sort = isset($_POST['sort']) ? strval($_POST['sort']) : 'id';
         $order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
         
-        $modelo = $this->modelo;
-        //$modelo = $this->router->class.'_model';
+        $nombre_modelo = $this->modelo;
+        //$modelo = 'elementos_model';
         //$this->load->model('proyectos/'.$modelo);
-        
+        $this->establecer_nombre_modelo($nombre_modelo);
+        $data['rows'] = $this->$nombre_modelo->obtener_todo($rows,$offset,$sort,$order);
+        $this->load->view('plantilla/cabecera');
+        $this->load->view('proyectos/elementos_form',$data);
+        $this->load->view('plantilla/pie');
+    }
+
+    function proyectos_data()
+    {
+        $modelo = 'proyectos_model';
+        $this->load->model('proyectos/'.$modelo);
+        $this->establecer_nombre_modelo($modelo);
+        $data['rows'] = $this->proyectos_model->obtener_nombre();
+        echo json_encode($data['rows']);
+    }
+    
+    function obtener_detalle() {
+        $modelo = 'tareas_model';
+        $this->load->model('proyectos/'.$modelo);
         $resultado = array();
         $resultado['total'] = $this->$modelo->num_registros();
-        $resultado['rows'] = $this->$modelo->obtener_todo($rows,$offset,$sort,$order);
+        $resultado['rows'] = $this->$modelo->obtener_por_elemento();
         echo json_encode($resultado);
     }
 
@@ -59,11 +68,9 @@ class MY_Controlador_Base extends CI_Controller {
      * 
      * @return void
      */
-    function guardar_data() {
-        $modelo = $this->modelo;
-        //$modelo = $this->router->class.'_model';
-        //$this->load->model('proyectos/'.$modelo);
-
+    function guardar_detalle() {
+        $modelo = 'tareas_model';
+        $this->load->model('proyectos/'.$modelo);
         if( $this->$modelo->guardar_actualizar() ) {
             $resultado = array('success' => TRUE);
         } else{
@@ -80,10 +87,9 @@ class MY_Controlador_Base extends CI_Controller {
      * 
      * @return void
      */
-    function actualizar_data() {
-        $modelo = $this->modelo;
-        //$modelo = $this->router->class.'_model';
-        //$this->load->model('proyectos/'.$modelo);
+    function actualizar_detalle() {
+        $modelo = 'tareas_model';
+        $this->load->model('proyectos/'.$modelo);
 
         if( $this->$modelo->guardar_actualizar() ) {
             $resultado = array('success' => TRUE);
@@ -101,10 +107,9 @@ class MY_Controlador_Base extends CI_Controller {
      * 
      * @return void
      */
-    function eliminar_data() {
-        $modelo = $this->modelo;
-        //$modelo = $this->router->class.'_model';
-        //$this->load->model('proyectos/'.$modelo);
+    function eliminar_detalle() {
+        $modelo = 'tareas_model';
+        $this->load->model('proyectos/'.$modelo);
 
         if( $this->$modelo->eliminar() ) {
             $resultado = array('success' => TRUE);
@@ -116,12 +121,7 @@ class MY_Controlador_Base extends CI_Controller {
         }
         echo json_encode($resultado);
     }
-
-    function establecer_nombre_modelo($nombre='')
-    {
-        $this->modelo = $nombre;
-    }
 }
 
-/* End of file MY_Controlador_Base.php */
-/* Location: ./application/core/MY_Controlador_Base.php */
+/* End of file elementos.php */
+/* Location: ./application/core/elementos.php */

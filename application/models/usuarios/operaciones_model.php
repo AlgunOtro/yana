@@ -15,6 +15,7 @@ class Operaciones_model extends CI_Model {
 
     function __construct() {
         parent::__construct();
+        log_message('debug', 'Clase Modelo Operaciones Iniciado');
     }
 
     /**
