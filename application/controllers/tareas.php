@@ -48,12 +48,6 @@ class Tareas extends CI_Controller {
       $this->load->view('plantilla/pie');
     }
 
-    /**
-     * Agrega un producto al carro de compras
-     *
-     * @param int
-     * @return bool
-     */
     function actualizar_estado() {
         $modelo = 'tareas_model';
         $this->load->model('proyectos/'.$modelo);

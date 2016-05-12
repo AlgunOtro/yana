@@ -28,7 +28,6 @@ $(function(){
 			$(source).draggable('options').cursor='not-allowed';
 		},
 		onDrop:function(e,source){
-			console.log($(source).html());
 			var id = $(source).find('p:eq(0)').html();
 			var name = $(source).find('p:eq(1)').html();
 			var price = $(source).find('p:eq(2)').html();
