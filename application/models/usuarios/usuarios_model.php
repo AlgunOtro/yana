@@ -93,10 +93,10 @@ class Usuarios_model extends CI_Model {
     public function guardar_actualizar() {
         //Recibir datos por POST
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $usuario = isset($_POST['usuario']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['usuario'])))) : '';
-        $rol = isset($_POST['rol']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['rol'])))) : '';
-        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['estado'])))) : '';
-        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(strtolower(strval($_POST['isNewRecord']))) : '';
+        $usuario = isset($_POST['usuario']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['usuario'])))) : '';
+        $rol = isset($_POST['rol']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['rol'])))) : '';
+        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['estado'])))) : '';
+        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : '';
         //Es nuevo el registro
         if($esNuevo) {
             // 1. Usuarios

@@ -119,7 +119,7 @@ class Inicio extends CI_Controller {
 				$login = '';
 			}
 			//Recuperar datos del formulario
-			$user = strtolower($login);
+			$user = mb_strtolower($login);
 			//Conectar a LDAP
 			$ad = ldap_connect("ldap://{$host}.{$domain}.{$subdomain}") or die('No se puede conectar al servidor LDAP.');
 			//Configurar la versión de protocolo
@@ -183,7 +183,7 @@ class Inicio extends CI_Controller {
 	function _limpiar_intentos($user) {
 		$direccion_ip = $this->session->userdata('ip_address');
 		$this->load->model('inicio/intentos_acceso');
-		return $this->intentos_acceso->limpiar_intentos($direccion_ip,strtolower($user));
+		return $this->intentos_acceso->limpiar_intentos($direccion_ip,mb_strtolower($user));
 	}
 
 	/**

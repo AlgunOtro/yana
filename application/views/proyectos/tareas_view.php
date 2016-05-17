@@ -28,7 +28,7 @@
       			<?php foreach ($e1 as $row) : ?>
       			<tr>
       				<td>
-                                    <?php echo anchor('#','<div><p hidden>'.$row['id'].'</p><p style="font-weight:normal;font-size:small;">'.$row['nombre'].'</p></div>',array('class' => 'easyui-linkbutton item','data-options' => "plain:true",'style'=>'background:#B8CBED'));?>
+                                    <?php echo anchor('#','<div><p hidden>'.$row['id'].'</p><p style="font-weight:normal;font-size:small;">'.$row['nombre'].'</p></div>',array('class' => 'easyui-linkbutton item easyui-tooltip','data-options' => "plain:true",'style'=>'background:#B8CBED','title'=>'<b>Id:</b> '.$row['id'].'<br><b>Nombre:</b> '.$row['nombre'].'<br><b>Estado:</b> '.$row['estado'].'<br><b>Elemento:</b> '.$row['elemento']));?>
       				</td>
       			</tr>
       			<?php endforeach;?>
@@ -64,7 +64,7 @@
       			<?php foreach ($e2 as $row) : ?>
       			<tr>
       				<td>
-      					<?php echo anchor('#','<div><p hidden>'.$row['id'].'</p><p style="font-weight:normal;font-size:small;">'.$row['nombre'].'</p></div>',array('class' => 'easyui-linkbutton item','data-options' => "plain:true",'style'=>'background:#B0E9E9'));?>
+      					<?php echo anchor('#','<div><p hidden>'.$row['id'].'</p><p style="font-weight:normal;font-size:small;">'.$row['nombre'].'</p></div>',array('class' => 'easyui-linkbutton item easyui-tooltip','data-options' => "plain:true",'style'=>'background:#B0E9E9','title'=>'<b>Id:</b> '.$row['id'].'<br><b>Nombre:</b> '.$row['nombre'].'<br><b>Estado:</b> '.$row['estado'].'<br><b>Elemento:</b> '.$row['elemento']));?>
       				</td>
       			</tr>
       			<?php endforeach;?>
@@ -99,7 +99,7 @@
       			<?php foreach ($e3 as $row) : ?>
       			<tr>
       				<td>
-                                    <?php echo anchor('#','<div><p hidden>'.$row['id'].'</p><p style="font-weight:normal;font-size:small;">'.$row['nombre'].'</p></div>',array('class' => 'easyui-linkbutton item','data-options' => "plain:true",'style'=>'background:#B8F4B8'));?>
+                                    <?php echo anchor('#','<div><p hidden>'.$row['id'].'</p><p style="font-weight:normal;font-size:small;">'.$row['nombre'].'</p></div>',array('class' => 'easyui-linkbutton item easyui-tooltip','data-options' => "plain:true",'style'=>'background:#B8F4B8','title'=>'<b>Id:</b> '.$row['id'].'<br><b>Nombre:</b> '.$row['nombre'].'<br><b>Estado:</b> '.$row['estado'].'<br><b>Elemento:</b> '.$row['elemento']));?>
       				</td>
       			</tr>
       			<?php endforeach;?>

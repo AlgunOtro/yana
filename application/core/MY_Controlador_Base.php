@@ -63,13 +63,13 @@ class MY_Controlador_Base extends CI_Controller {
         $modelo = $this->modelo;
         //$modelo = $this->router->class.'_model';
         //$this->load->model('proyectos/'.$modelo);
-
-        if( $this->$modelo->guardar_actualizar() ) {
+        $respuesta = $this->$modelo->guardar_actualizar();
+        if( $respuesta === TRUE ) {
             $resultado = array('success' => TRUE);
         } else{
             $resultado = array(
                 'isError' => TRUE,
-                'message' => 'No se guardaron los datos.'
+                'message' => $respuesta
             );
         }
         echo json_encode($resultado);
@@ -84,13 +84,13 @@ class MY_Controlador_Base extends CI_Controller {
         $modelo = $this->modelo;
         //$modelo = $this->router->class.'_model';
         //$this->load->model('proyectos/'.$modelo);
-
-        if( $this->$modelo->guardar_actualizar() ) {
+        $respuesta = $this->$modelo->guardar_actualizar();
+        if( $respuesta === TRUE ) {
             $resultado = array('success' => TRUE);
         } else{
             $resultado = array(
                 'isError' => TRUE,
-                'message' => 'No se guardaron los datos.'
+                'message' => $respuesta
             );
         }
         echo json_encode($resultado);
@@ -106,12 +106,12 @@ class MY_Controlador_Base extends CI_Controller {
         //$modelo = $this->router->class.'_model';
         //$this->load->model('proyectos/'.$modelo);
 
-        if( $this->$modelo->eliminar() ) {
+        if( $this->$modelo->eliminar() === TRUE ) {
             $resultado = array('success' => TRUE);
         } else{
             $resultado = array(
                 'isError' => TRUE,
-                'message' => 'No se guardaron los datos.'
+                'message' => $resultado
             );
         }
         echo json_encode($resultado);

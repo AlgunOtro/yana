@@ -49,7 +49,7 @@ class Permiso_acceso extends CI_Model
 	 * @return	bool
 	 */
 	function tiene_acceso($modulo,$usuario) {
-		$query="SELECT 1 FROM ".$this->table_name_usuarios." T0 JOIN ".$this->table_name_usu_rol." T1 ON T0.ID = T1.FK_USUARIO_ID JOIN ".$this->table_name_roles." T2 ON T1.FK_ROL_ID = T2.ID JOIN ".$this->table_name_rol_per." T3 ON T2.ID = T3.FK_ROL_ID JOIN ".$this->table_name_permisos." T4 ON T3.FK_PERMISO_ID = T4.ID JOIN ".$this->table_name_objetos." T5 ON T4.FK_OBJETO_ID = T5.ID JOIN ".$this->table_name_operaciones." T6 ON T4.FK_OPERACION_ID = T6.ID WHERE T0.USUARIO = '".$usuario."' AND UPPER(T5.ENLACE) = '".strtoupper($modulo)."' AND T6.OPERACION = 'ver'";
+		$query="SELECT 1 FROM ".$this->table_name_usuarios." T0 JOIN ".$this->table_name_usu_rol." T1 ON T0.ID = T1.FK_USUARIO_ID JOIN ".$this->table_name_roles." T2 ON T1.FK_ROL_ID = T2.ID JOIN ".$this->table_name_rol_per." T3 ON T2.ID = T3.FK_ROL_ID JOIN ".$this->table_name_permisos." T4 ON T3.FK_PERMISO_ID = T4.ID JOIN ".$this->table_name_objetos." T5 ON T4.FK_OBJETO_ID = T5.ID JOIN ".$this->table_name_operaciones." T6 ON T4.FK_OPERACION_ID = T6.ID WHERE T0.USUARIO = '".$usuario."' AND UPPER(T5.ENLACE) = '".mb_strtoupper($modulo)."' AND T6.OPERACION = 'ver'";
 		$res = $this->db->query($query);
 		if ($res) {
 			if ( $res->num_rows() > 0 ) {
@@ -67,7 +67,7 @@ class Permiso_acceso extends CI_Model
 	 * @return	bool
 	 */
 	function tiene_acceso_lectura($modulo,$usuario) {
-		$query="SELECT 1 FROM ".$this->table_name_usuarios." T0 JOIN ".$this->table_name_usu_rol." T1 ON T0.ID = T1.FK_USUARIO_ID JOIN ".$this->table_name_roles." T2 ON T1.FK_ROL_ID = T2.ID JOIN ".$this->table_name_rol_per." T3 ON T2.ID = T3.FK_ROL_ID JOIN ".$this->table_name_permisos." T4 ON T3.FK_PERMISO_ID = T4.ID JOIN ".$this->table_name_objetos." T5 ON T4.FK_OBJETO_ID = T5.ID JOIN ".$this->table_name_operaciones." T6 ON T4.FK_OPERACION_ID = T6.ID WHERE T0.USUARIO = '".$usuario."' AND UPPER(T5.ENLACE) = '".strtoupper($modulo)."' AND T6.OPERACION = 'leer'";
+		$query="SELECT 1 FROM ".$this->table_name_usuarios." T0 JOIN ".$this->table_name_usu_rol." T1 ON T0.ID = T1.FK_USUARIO_ID JOIN ".$this->table_name_roles." T2 ON T1.FK_ROL_ID = T2.ID JOIN ".$this->table_name_rol_per." T3 ON T2.ID = T3.FK_ROL_ID JOIN ".$this->table_name_permisos." T4 ON T3.FK_PERMISO_ID = T4.ID JOIN ".$this->table_name_objetos." T5 ON T4.FK_OBJETO_ID = T5.ID JOIN ".$this->table_name_operaciones." T6 ON T4.FK_OPERACION_ID = T6.ID WHERE T0.USUARIO = '".$usuario."' AND UPPER(T5.ENLACE) = '".mb_strtoupper($modulo)."' AND T6.OPERACION = 'leer'";
 		$res = $this->db->query($query);
 		if ($res) {
 			if ( $res->num_rows() > 0 ) {

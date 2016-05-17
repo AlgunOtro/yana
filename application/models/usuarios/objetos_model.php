@@ -75,10 +75,10 @@ class Objetos_model extends CI_Model {
     public function guardar_actualizar() {
         //Recibir datos por POST
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(strtoupper(strval($_POST['nombre'])))) : '';
-        $tipo = isset($_POST['tipo']) ? $this->security->xss_clean(trim(strtoupper(strval($_POST['tipo'])))) : '';
-        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['estado'])))) : '';
-        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(strtolower(strval($_POST['isNewRecord']))) : '';
+        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(mb_strtoupper(strval($_POST['nombre'])))) : '';
+        $tipo = isset($_POST['tipo']) ? $this->security->xss_clean(trim(mb_strtoupper(strval($_POST['tipo'])))) : '';
+        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['estado'])))) : '';
+        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : '';
         //Es nuevo el registro
         if($esNuevo) {
             //Verificar si el objeto ya existe

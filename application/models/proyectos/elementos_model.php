@@ -67,7 +67,11 @@ class Elementos_model extends CI_Model {
      */
     public function num_registros()
     {
-        $this->db->from($this->table_name_elementos);
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $this->db->select('t0.*')
+        ->from($this->table_name_elementos.' t0')
+        ->join($this->table_name_proyectos.' t1','t0.proyecto_id = t1.id')
+        ->where('t1.id',$id);
         return $this->db->count_all_results();
     }
 
@@ -110,10 +114,10 @@ class Elementos_model extends CI_Model {
     public function guardar_actualizar() {
         //Recibir datos por POST
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(strtoupper(strval($_POST['nombre'])))) : NULL;
+        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(mb_strtoupper(strval($_POST['nombre'])))) : NULL;
         $proyecto_id = isset($_POST['proyecto_id']) ? $this->security->xss_clean(trim(intval($_POST['proyecto_id']))) : NULL;
-        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['estado'])))) : NULL;
-        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(strtolower(strval($_POST['isNewRecord']))) : NULL;
+        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['estado'])))) : NULL;
+        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : NULL;
         $usuario = $this->session->userdata('username');
         $direccion_ip = $this->input->ip_address();
         $creado = date('Y-m-d H:i:s');

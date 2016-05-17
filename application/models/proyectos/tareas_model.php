@@ -33,7 +33,7 @@ class Tareas_model extends CI_Model {
      */
     public function obtener($id = '')
     {
-        $resultado = $this->db->select('t0.id,t0.nombre,t0.estado')
+        $resultado = $this->db->select('t0.id,t0.nombre,t0.estado,t1.nombre elemento')
         ->from($this->table_name_tareas.' t0')
         ->join($this->table_name_elementos.' t1','t0.elemento_id = t1.id')
         ->join($this->table_name_proyectos.' t2','t1.proyecto_id = t2.id')
@@ -120,10 +120,10 @@ class Tareas_model extends CI_Model {
     public function guardar_actualizar() {
         //Recibir datos por POST
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(strtoupper(strval($_POST['nombre'])))) : NULL;
+        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(mb_strtoupper(strval($_POST['nombre'])))) : NULL;
         $elemento_id = isset($_POST['elemento_id']) ? $this->security->xss_clean(trim(intval($_POST['elemento_id']))) : NULL;
-        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(strtolower(intval($_POST['estado'])))) : NULL;
-        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(strtolower(strval($_POST['isNewRecord']))) : NULL;
+        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(mb_strtolower(intval($_POST['estado'])))) : NULL;
+        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : NULL;
         $usuario = $this->session->userdata('username');
         $direccion_ip = $this->input->ip_address();
         $creado = date('Y-m-d H:i:s');
@@ -209,7 +209,7 @@ class Tareas_model extends CI_Model {
     function actualizar_estado()
     {
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(strtolower(intval($_POST['estado'])))) : NULL;
+        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(mb_strtolower(intval($_POST['estado'])))) : NULL;
         $usuario = $this->session->userdata('username');
         $direccion_ip = $this->input->ip_address();
         

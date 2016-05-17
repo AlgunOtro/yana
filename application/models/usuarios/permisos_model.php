@@ -136,10 +136,10 @@ class Permisos_model extends CI_Model {
         //Recibir datos por POST
         $resultado = '';
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $objeto = isset($_POST['objeto']) ? $this->security->xss_clean(trim(strtoupper(strval($_POST['objeto'])))) : '';
-        $operacion = isset($_POST['operacion']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['operacion'])))) : '';
-        $rol = isset($_POST['rol']) ? $this->security->xss_clean(trim(strtolower(strval($_POST['rol'])))) : '';
-        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(strtolower(strval($_POST['isNewRecord']))) : '';
+        $objeto = isset($_POST['objeto']) ? $this->security->xss_clean(trim(mb_strtoupper(strval($_POST['objeto'])))) : '';
+        $operacion = isset($_POST['operacion']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['operacion'])))) : '';
+        $rol = isset($_POST['rol']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['rol'])))) : '';
+        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : '';
 
         $id_objeto = $this->obtener_id_objeto($objeto);
         if( $id_objeto ) {
