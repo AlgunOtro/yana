@@ -14,7 +14,7 @@ class MY_Admin_Ctrl extends CI_Controller {
 		$this->load->model('inicio/permiso_acceso');
 		if( $this->session->userdata('logged_in') ) {
 			if( ! $this->permiso_acceso->tiene_acceso( $this->router->class, $this->session->userdata('username') ) ) {
-				redirect('inicio');
+				//redirect('inicio');
 			}
 		} else {
             redirect('inicio');

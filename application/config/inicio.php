@@ -9,7 +9,7 @@ $config['login_settings'] =  array(
 	'clave' => array(
 		'field' => 'clave',
 		'label' => 'Clave',
-		'rules' => 'trim|required|xss_clean|max_length[15]|callback__check_ad'
+		'rules' => 'trim|required|xss_clean|max_length[100]|callback__check_ad'
 		)
 	);
 
