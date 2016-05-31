@@ -26,6 +26,15 @@ class Usuarios_model extends CI_Model {
      * @return array
      */
     public function obtener() {
+        if( $this->config->item("tiene_directorio_activo") ){
+            echo 'siga como antes';
+            $this->campo_usuario = 'USUARIO';
+        } else {
+            echo 'nada';
+            $this->table_name_usuarios = 'USERS';
+            $this->campo_usuario = 'username';
+            $this->directorio_activo = 0;
+        }
         $resultado = $this->db->select('t0.id,t0.usuario,t2.rol,t0.estado')
         ->from($this->table_name_usuarios.' t0')
         ->join($this->table_name_usuarios_roles.' t1','t0.id = t1.fk_usuario_id','left')

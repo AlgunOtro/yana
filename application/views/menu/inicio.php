@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/easyui/themes/icon.css"); ?>" />
 </head>
 <body>
-  <?php $attributes = array('class' => 'well'); ?>
+  <?php $attributes = array('class' => 'well','autocomplete' => 'off'); ?>
   <?php echo form_open('inicio/login',$attributes); ?>
   <img id="logo" src="<?php echo base_url('assets/imagenes/adc-has1.png');?>">
   <input type="text" name="nombre" value="<?php echo set_value('nombre'); ?>" placeholder="Nombre" class="form-control" />
