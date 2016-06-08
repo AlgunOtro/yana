@@ -1,13 +1,31 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
- * Permisos_model
+ * Archivo permisos_model.php
  *
- * Representa los datos de Permisos Roles
+ * Contiene la Clase Permisos_model que extiende de la Clase MY_Admin_Model
  *
+ * @package Atuk\Usuarios
  * @author Byron Oña
- *
+ * @copyright © 2015-2016 Byron Oña
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version v1.0.0
  */
-class Permisos_model extends CI_Model {
+
+/** No acceso directo */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Modelo Permisos
+ *
+ * Representa los datos de los roles. Opera con las siguientes tablas:
+ * - roles
+ *
+ * @package Atuk\Usuarios
+ * @author Byron Oña
+ * @version v1.0.0
+ */
+class Permisos_model extends MY_Admin_Model {
 
     public $limit;
     public $offset;
@@ -28,7 +46,7 @@ class Permisos_model extends CI_Model {
      * @return array
      */
     public function obtener() {
-        $resultado = $this->db->select('t3.id,t1.nombre objeto,t1.tipo,t2.operacion,t4.rol')
+        $resultado = $this->db->select('t0.descripcion,t3.id,t1.nombre objeto,t1.tipo,t2.operacion,t4.rol')
         ->from($this->table_name_permisos.' t0')
         ->join($this->table_name_objetos.' t1','t0.fk_objeto_id = t1.id')
         ->join($this->table_name_operaciones.' t2','t0.fk_operacion_id = t2.id')
