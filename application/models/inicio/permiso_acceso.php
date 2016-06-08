@@ -63,7 +63,7 @@ class Permiso_acceso extends CI_Model
 		}
 		$query="SELECT 1 FROM ".$this->table_name_usuarios." T0 JOIN ".$this->table_name_usu_rol." T1 ON T0.ID = T1.FK_USUARIO_ID JOIN ".$this->table_name_roles." T2 ON T1.FK_ROL_ID = T2.ID JOIN ".$this->table_name_rol_per." T3 ON T2.ID = T3.FK_ROL_ID JOIN ".$this->table_name_permisos." T4 ON T3.FK_PERMISO_ID = T4.ID JOIN ".$this->table_name_objetos." T5 ON T4.FK_OBJETO_ID = T5.ID JOIN ".$this->table_name_operaciones." T6 ON T4.FK_OPERACION_ID = T6.ID WHERE T0.".$this->campo_usuario." = '".$usuario."' AND UPPER(T5.ENLACE) = '".mb_strtoupper($modulo)."' AND T6.OPERACION = 'ver' AND T1.DIRECTORIO_ACTIVO = ".$this->directorio_activo."";
 		$res = $this->db->query($query);
-		var_dump($this->db->last_query());
+		//var_dump($this->db->last_query());
 		if ($res) {
 			if ( $res->num_rows() > 0 ) {
 				return TRUE;

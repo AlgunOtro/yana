@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost:8234/yana';
+$config['base_url'] = 'http://192.168.1.3:8234/yana';
 
 /*
 |--------------------------------------------------------------------------
