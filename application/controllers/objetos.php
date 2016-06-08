@@ -1,24 +1,53 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * Archivo objetos.php
+ *
+ * Contiene la Clase Objetos que extiende de la Clase MY_Admin_Ctrl
+ *
+ * @package Atuk\Usuarios
+ * @author Byron Oña
+ * @copyright © 2015-2016 Byron Oña
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version v1.0.0
+ */
 
-class Objetos extends MY_Admin_Ctrl {
+/** No acceso directo */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Controlador Objetos
+ *
+ * Permite gestionar los objetos
+ *
+ * @package Atuk\Usuarios
+ * @author Byron Oña
+ * @version v1.0.0
+ */
+class Objetos extends MY_Admin_Ctrl
+{
 	/**
-     * Controlador Objetos
-     *
-     * @author Byron Oña
-     */
-
-	function __construct(){
+	 * Constructor
+	 *
+	 * Carga la clase padre MY_Admin_Ctrl
+	 *
+     * @return	void
+	 */
+	function __construct()
+	{
 		parent::__construct();
 	}
 
-	function index() {
+	/**
+	 * Index
+	 *
+     * Redirecciona al método listar() para mostrar los datos
+     *
+     * @return void
+     */
+	function index()
+	{
 		redirect($this->router->class.'/listar');
-	}
-
-	function probar_modelo() {
-		$this->load->model('usuarios/objetos_model');
-		var_dump( $this->objetos_model->obtener_id('usuarios') );
-		var_dump( $this->objetos_model->existe('usuarios') );
 	}
 }
 

@@ -18,8 +18,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Modelo Roles
  *
- * Representa los datos de los roles de la aplicación. Opera con las
- * siguientes tablas:
+ * Representa los datos de los roles. Opera con las siguientes tablas:
  * - roles
  *
  * @package Atuk\Usuarios
