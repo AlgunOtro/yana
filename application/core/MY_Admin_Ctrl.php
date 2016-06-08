@@ -195,6 +195,7 @@ class MY_Admin_Ctrl extends CI_Controller
     {
         $modelo = $this->router->class.'_model';
         $this->load->model('usuarios/'.$modelo);
+        $this->$modelo->establecer_nombre_tabla($this->router->class);
 
         //Recuperar los errores desde el modelo
         $resultados = $this->$modelo->guardar_actualizar();

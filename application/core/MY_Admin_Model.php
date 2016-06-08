@@ -46,8 +46,8 @@ class MY_Admin_Model extends CI_Model
 		}
 		else
 		{
-            redirect('inicio');
-        }
+			redirect('inicio');
+		}
 	}
 
 	/**
@@ -88,12 +88,12 @@ class MY_Admin_Model extends CI_Model
      * 
      * @return array
      */
-    public function obtener($rows,$offset,$sort,$order)
-    {
-        $this->db->from($this->obtener_nombre_tabla());
-        $resultado = $this->db->get('',$rows, $offset);
-        return $resultado->result_array();
-    }
+	public function obtener($rows,$offset,$sort,$order)
+	{
+		$this->db->from($this->obtener_nombre_tabla());
+		$resultado = $this->db->get('',$rows, $offset);
+		return $resultado->result_array();
+	}
 
     /**
      * Número de registros
@@ -104,8 +104,8 @@ class MY_Admin_Model extends CI_Model
      */
     public function num_registros()
     {
-        $this->db->from($this->obtener_nombre_tabla());
-        return $this->db->count_all_results();
+    	$this->db->from($this->obtener_nombre_tabla());
+    	return $this->db->count_all_results();
     }
 
     /**
@@ -119,10 +119,10 @@ class MY_Admin_Model extends CI_Model
      */
     function obtener_id($nombre='')
     {
-        $resultado = $this->db->select('id')->from($this->obtener_nombre_tabla())->where('nombre',$nombre)->get();
-        foreach ($resultado->row() as $key => $value)
-            return $value;
-        return 0;
+    	$resultado = $this->db->select('id')->from($this->obtener_nombre_tabla())->where('nombre',$nombre)->get();
+    	foreach ($resultado->row() as $key => $value)
+    		return $value;
+    	return 0;
     }
 
     /**
@@ -134,10 +134,12 @@ class MY_Admin_Model extends CI_Model
      *
      * @return bool
      */
-    function existe($nombre='')
+    function existe($data = '')
     {
-        $resultado = $this->db->select('id')->from($this->obtener_nombre_tabla())->where('nombre',$nombre)->get();
-        return $resultado->num_rows();
+    	unset($data['creado']);
+    	unset($data['modificado']);
+    	$resultado = $this->db->select('id')->from($this->obtener_nombre_tabla())->where($data)->get();
+    	return $resultado->num_rows();
     }
 
     /**
@@ -150,67 +152,74 @@ class MY_Admin_Model extends CI_Model
     function guardar_actualizar()
     {
         //Recibir datos por POST
-        $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $nombre = isset($_POST['nombre']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['nombre'])))) : '';
-        $estado = isset($_POST['estado']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['estado'])))) : '';
-        $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : '';
-        //Es nuevo el registro
-        if ($esNuevo)
-        {
-            //Verificar si el nombre ya existe
-            $existe_registro = $this->existe($nombre);
-            if ($existe_registro)
-            {
-                return 'El nombre ya existe.';
-            }
-            else
-            {
+    	$id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
+    	$esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : '';
+    	unset($_POST['id']);
+    	unset($_POST['isNewRecord']);
+    	foreach ($this->input->post() as $key => $value)
+    	{
+    		$data[$key] = $value;
+    	}
+    	//Verificar si el registro ya existe
+    	if ($this->existe($data))
+    	{
+    		return 'El registro ya existe.';
+    	}
+    	else
+    	{
+        	//Es nuevo el registro
+    		if ($esNuevo)
+    		{
+    			foreach ($this->input->post() as $key => $value)
+    			{
+    				$data[$key] = $value;
+    			}
                 //Preparar INSERT a la BD
-                $data = array('nombre' => $nombre,'estado' => $estado);
-                $query = $this->db->insert($this->obtener_nombre_tabla(), $data);
+    			$query = $this->db->insert($this->obtener_nombre_tabla(), $data);
                 //Destruir la variable utilizada para hacer el INSERT
-                unset($data['nombre']);
-                unset($data['estado']);
-                if ($query)
-                {
-                    return $query;
-                }
-                else
-                {
+    			$data = NULL;
+    			if ($query)
+    			{
+    				return $query;
+    			}
+    			else
+    			{
                     // 1. El INSERT no se ejecutó
-                    return 'No se guardó el nombre.';
-                }
-            }
-        }
-        else
-        {
-            //Ejecutar si el ID es diferente de 0
-            if ($id != 0)
-            {
-                //Preparar UPDATE a la BD
-                $data = array('nombre' => $nombre,'estado' => $estado);
-                $this->db->where('id', $id);
-                $query = $this->db->update($this->obtener_nombre_tabla(), $data);
-                //Destruir la variable utilizada para hacer el UPDATE
-                unset($data['nombre']);
-                unset($data['estado']);
-                //Retornar TRUE si el UPDATE fue correcto
-                if ($query)
-                {
-                    return $query;
-                }
-                else
-                {
-                    // 1. El UPDATE no se ejecutó
-                    return 'No se actualizó el nombre.';
-                }
-            }
-            else
-            {
-                // 0. El ID de nombre no existe
-                return 'No existe el nombre.';
-            }
-        }
+    				return 'No se guardó el registro.';
+    			}
+    		}
+    		else
+    		{
+            	//Ejecutar si el ID es diferente de 0
+    			if ($id != 0)
+    			{
+    				foreach ($this->input->post() as $key => $value)
+    				{
+    					$data[$key] = $value;
+    				}
+                	//Preparar UPDATE a la BD
+    				$this->db->where('id', $id);
+    				$query = $this->db->update($this->obtener_nombre_tabla(), $data);
+                	//Destruir la variable utilizada para hacer el UPDATE
+    				$data = NULL;
+                	//Retornar TRUE si el UPDATE fue correcto
+    				if ($query)
+    				{
+    					return $query;
+    				}
+    				else
+    				{
+                    	// 1. El UPDATE no se ejecutó
+    					return 'No se actualizó el registro.';
+    				}
+    			}
+    			else
+    			{
+                	// 0. El ID del registro no existe
+    				return 'No existe el Id del registro.';
+    			}
+    		}
+    	}
     }
 }
 
