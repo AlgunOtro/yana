@@ -25,9 +25,17 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @author Byron Oña
  * @version v1.0.0
  */
-class Operaciones_model extends MY_Admin_Model {
-
-    function __construct() {
+class Operaciones_model extends MY_Admin_Model
+{
+	/**
+	 * Constructor
+	 *
+	 * Carga la clase padre MY_Admin_Model
+	 *
+     * @return	void
+	 */
+    function __construct()
+    {
         parent::__construct();
     }
 }

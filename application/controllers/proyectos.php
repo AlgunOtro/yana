@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-class Proyectos extends MY_Controlador_Base {
+class Proyectos extends MY_Admin_Ctrl {
 	/**
      * Compras
      *
@@ -8,6 +8,7 @@ class Proyectos extends MY_Controlador_Base {
 
 	public function __construct(){
 		parent::__construct();
+        $this->establecer_nombre_modulo('proyectos/');
 	}
 
     function index()
@@ -20,17 +21,17 @@ class Proyectos extends MY_Controlador_Base {
      *
      * @return void
      */
-    function listar()
+    function editar()
     {
         $this->load->model('proyectos/proyectos_model');
         $data['rows'] = $this->proyectos_model->obtener_nombre();
         $data['total'] = $this->proyectos_model->num_registros();
         $this->load->view('plantilla/cabecera');
-        $this->load->view('proyectos/proyectos_view',$data);
+        $this->load->view('proyectos/proyectos',$data);
         $this->load->view('plantilla/pie');
     }
 
-    function editar()
+    /*function obtener_todo()
     {
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
@@ -41,9 +42,9 @@ class Proyectos extends MY_Controlador_Base {
         $this->load->model('proyectos/proyectos_model');
         $data['rows'] = $this->proyectos_model->obtener_todo($rows,$offset,$sort,$order);
         $this->load->view('plantilla/cabecera');
-        $this->load->view('proyectos/proyectos_form',$data);
+        $this->load->view('proyectos/proyectos_view',$data);
         $this->load->view('plantilla/pie');
-    }
+    }*/
 }
 
 /* End of file proyectos.php */

@@ -7,7 +7,7 @@
  * @author Byron Oña
  *
  */
-class Tareas_model extends CI_Model {
+class Tareas_model extends MY_Admin_Model {
 
     public $limit;
     public $offset;

@@ -90,6 +90,8 @@ class MY_Admin_Model extends CI_Model
      */
 	public function obtener($rows,$offset,$sort,$order)
 	{
+        //con el total de resultados cambiar la consulta para recuperar todos (hasta maximo 100 registros) o solo 10 para la paginación
+        //actualmente esta para que recupere 10 registros
 		$this->db->from($this->obtener_nombre_tabla());
 		$resultado = $this->db->get('',$rows, $offset);
 		return $resultado->result_array();

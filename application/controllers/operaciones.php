@@ -36,6 +36,7 @@ class Operaciones extends MY_Admin_Ctrl
 	function __construct()
 	{
 		parent::__construct();
+		$this->establecer_nombre_modulo('usuarios/');
 	}
 
 	/**

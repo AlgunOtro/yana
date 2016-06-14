@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-class Elementos extends MY_Controlador_Base
+class Elementos extends MY_Admin_Ctrl
 {
     /**
      * Elementos
@@ -11,7 +11,6 @@ class Elementos extends MY_Controlador_Base
     public function __construct()
     {
         parent::__construct();
-        log_message('debug', 'Controlador Elemento Iniciado');
         $this->modelo = 'elementos_model';
         $this->load->model('proyectos/'.$this->modelo);
     }
@@ -41,7 +40,7 @@ class Elementos extends MY_Controlador_Base
         $this->establecer_nombre_modelo($nombre_modelo);
         $data['rows'] = $this->$nombre_modelo->obtener_todo($rows,$offset,$sort,$order);
         $this->load->view('plantilla/cabecera');
-        $this->load->view('proyectos/elementos_form',$data);
+        $this->load->view('proyectos/elementos_view',$data);
         $this->load->view('plantilla/pie');
     }
 

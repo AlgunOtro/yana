@@ -1,21 +1,50 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * Archivo inicio.php
+ *
+ * Contiene la Clase Inicio que extiende de la Clase CI_Controller
+ *
+ * @package Atuk\Inicio
+ * @author Byron Oña
+ * @copyright © 2015-2016 Byron Oña
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version v1.0.0
+ */
 
+/** No acceso directo */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Controlador Inicio
+ *
+ * Permite comprobar el acceso a la aplicación
+ *
+ * @package Atuk\Inicio
+ * @author Byron Oña
+ * @version v1.0.0
+ */
 class Inicio extends CI_Controller
 {
 	/**
-	 * Controlador Inicio
+	 * Constructor
 	 *
-	 * @author Byron Oña
+	 * Carga las bibliotecas: form_validation y security,
+	 * los archivos de idioma español: form_validation e inspecciones,
+	 * el modelo: inicio/permiso_acceso,
+	 * los archivos de configuración: sigep e inicio
+	 *
+     * @return	void
 	 */
 
-	function __construct() {
+	function __construct()
+	{
 		parent::__construct();
-		log_message('debug', 'Clase Controlador Inicio Iniciado');
 		$this->load->library('form_validation');
 		$this->load->library('security');
 		$this->load->library('tank_auth');
 		$this->lang->load('form_validation','spanish');
-		$this->lang->load('bussing','spanish');
+		$this->lang->load('sigep','spanish');
 		$this->lang->load('tank_auth','spanish');
 		$this->load->model('inicio/permiso_acceso');
 		$this->config->load('sigep');
@@ -23,13 +52,16 @@ class Inicio extends CI_Controller
 	}
 
 	/**
-	 * Redirecciona a la Pantalla Principal si se ha iniciado sesión,
+	 * Index
+	 *
+     * Redirecciona a la Pantalla Principal si se ha iniciado sesión,
      * sino redirecciona a la Pantalla de Inicio
      *
      * @return void
      */
 	function index()
 	{
+		//Verifica si tiene una sesión activa
 		if ( ! $this->session->userdata('logged_in'))
 		{
 			//Crea la sesión
@@ -37,26 +69,28 @@ class Inicio extends CI_Controller
 				'logged_in'	=> FALSE,
 				'intentos'	=> 1,
 				));
-			//Redirección a Pantalla de Inicio
+			//Redirecciona Pantalla de Inicio
 			$data["login_form"] = $this->config->item("login_settings");
 			$this->load->view('menu/inicio', $data);
 		}
 		else
 		{
-			//Redirección a Pantalla Principal
+			//Redirecciona Pantalla Principal
 			redirect('inicio/menu');
 		}
 	}
 
 	/**
+	 * Login
+	 *
 	 * Verifica el inicio de sesión, si es correcto se redirecciona a
 	 * la Pantalla Principal sino a la Pantalla de Inicio
 	 *
-	 * @return	void
+	 * @return void
 	 */
 	function login()
 	{
-		if ( !$this->session->userdata('logged_in'))
+		if ( ! $this->session->userdata('logged_in'))
 		{
 			//Reglas del formulario
 			$this->form_validation->set_rules($this->config->item("login_settings"));
@@ -86,13 +120,16 @@ class Inicio extends CI_Controller
 	}
 
 	/**
+	 * Menu
+	 *
 	 * Muestra la Pantalla Principal si se ha iniciado sesión,
 	 * sino se redirecciona a la Pantalla de Inicio
 	 *
-	 * @return	void
+	 * @return void
 	 */
 	function menu()
 	{
+		//Si tiene sesión
 		if ($this->session->userdata('logged_in'))
 		{
 			$data = array();
@@ -101,6 +138,7 @@ class Inicio extends CI_Controller
 			$menu['menu'] = $arr_menu;
 			$data = array_merge($data,$menu);
 			$this->load->view('plantilla/cabecera',$data);
+			$this->load->view('plantilla/principal');
 			$this->load->view('plantilla/pie');
 		}
 		else
@@ -111,12 +149,16 @@ class Inicio extends CI_Controller
 	}
 
 	/**
-	 * Cierra la sesión
+	 * Salir
 	 *
-	 * @return	void
+	 * Cierra la sesión y redirecciona a la Pantalla de Inicio
+	 *
+	 * @return void
 	 */
 	function salir()
 	{
+		$this->load->model('inicio/actividad_sesion_model');
+		$this->actividad_sesion_model->insertar('Cierre de sesión');
 		// See http://codeigniter.com/forums/viewreply/662369/ as the reason for the next line
 		$this->session->set_userdata(array('user_id' => '', 'username' => '', 'status' => '','logged_in' => FALSE));
 		$this->session->sess_destroy();
@@ -125,10 +167,12 @@ class Inicio extends CI_Controller
 	}
 
 	/**
-	 * Verificar el inicio de sesión mediante Active Directory.
+	 * Check AD
 	 *
-	 * @param	string
-	 * @return	bool
+	 * Verifica el inicio de sesión mediante Active Directory
+	 *
+	 * @param string  $clave Clave del usuario
+	 * @return bool
 	 */
 	function _check_ad($password)
 	{

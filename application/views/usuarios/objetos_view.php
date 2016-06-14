@@ -1,18 +1,24 @@
-      <div class="container">
-        <table id="dg" class="easyui-edatagrid" data-options="
-          title:'OBJETOS',
+      <div class="principal" data-options="region:'center',border:false" style="overflow-y:auto;">
+        <table id="dg" class="easyui-edatagrid" title="<?php echo ucfirst($this->router->class);?>" style="width:100%;" data-options="
           url:'obtener_data',
           saveUrl:'actualizar_data',
           updateUrl:'actualizar_data',
           destroyUrl:'eliminar_data',
+          <?php if ($total > 5):?>
+          pagination:true,
+          <?php endif;?>
+          fitColumns:true,
+          fit:true,
           autoSave:true,
           singleSelect:true,
           idField:'id',
           toolbar:'#tb',
           columns:[[
-            {field:'id',title:'Id',width:20},
-            {field:'nombre',title:'Nombre',width:200,editor:{type:'validatebox',options:{required:true,validType:{length:[1,60]}}}},
-            {field:'tipo',title:'Tipo',width:200,editor:{type:'textbox',options:{required:true,validType:{length:[1,10]}}}},
+            {field:'id',title:'Id',fixed:true},
+            {field:'nombre',title:'Objeto',fixed:true,editor:{type:'validatebox',options:{required:true,validType:{length:[1,60]}}}},
+            {field:'tipo',title:'Tipo',fixed:true,editor:{type:'textbox',options:{required:true,validType:{length:[1,10]}}}},
+            {field:'enlace',title:'Enlace',fixed:true,editor:{type:'textbox',options:{required:true,validType:{length:[1,80]}}}},
+            {field:'menu',title:'Menú',fixed:true,editor:{type:'numberbox',options:{required:true,validType:{length:[1,1]}}}},
             {field:'estado',title:'Estado',align:'center',editor:{type:'checkbox',options:{on:'activo',off:'inactivo'}}}
           ]],
           onError:function(index,row){$.messager.alert('Error',row.msg,'error');},

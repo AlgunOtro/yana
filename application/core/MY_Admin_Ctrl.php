@@ -26,6 +26,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class MY_Admin_Ctrl extends CI_Controller
 {
+    /**
+     * @var string $modulo Nombre del modulo
+     */
+    private $modulo = '';
+
 	/**
      * Constructor
      *
@@ -54,6 +59,32 @@ class MY_Admin_Ctrl extends CI_Controller
         }
 	}
 
+    /**
+     * Obtener nombre modulo
+     *
+     * Obtiene el nombre de la modulo
+     *
+     * @return string
+     */
+    function obtener_nombre_modulo()
+    {
+        return $this->modulo;
+    }
+
+    /**
+     * Establecer nombre modulo
+     *
+     * Establece el nombre de la modulo
+     *
+     * @param string $modulo Nombre de la modulo
+     *
+     * @return void
+     */
+    function establecer_nombre_modulo($modulo = '')
+    {
+        $this->modulo = $modulo;
+    }
+
 	/**
      * Llama a la vista desde la que se cargan los datos.
      *
@@ -67,7 +98,7 @@ class MY_Admin_Ctrl extends CI_Controller
 		$data = array_merge($data,$menu);
 
 		$this->load->view('plantilla/cabecera',$data);
-		$this->load->view('usuarios/'.$this->router->class.'_view');
+		$this->load->view($this->obtener_nombre_modulo().$this->router->class.'_view');
         $this->load->view('plantilla/pie');
 	}
 
@@ -76,57 +107,21 @@ class MY_Admin_Ctrl extends CI_Controller
      * 
      * @return void
      */
-    function roles_data()
+    function obtener_lista($objeto = '')
     {
+        $modelo = $objeto.'_model';
+        $this->load->model($this->obtener_nombre_modulo().$modelo);
+        $this->$modelo->establecer_nombre_tabla($objeto);
+
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
         $offset = ($page-1)*$rows;
 
         $sort = isset($_POST['sort']) ? strval($_POST['sort']) : 'ID';
         $order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
-        $this->load->model('usuarios/roles_model');
+
         $result = array();
-        //$result["total"] = $this->roles_model->num_registros();
-        $result = $this->roles_model->obtener($rows,$offset,$sort,$order);
-        echo json_encode($result);
-    }
-
-    /**
-     * Recuperar los datos desde la BD en formato JSON
-     * 
-     * @return void
-     */
-    function operaciones_data()
-    {
-        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-        $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
-        $offset = ($page-1)*$rows;
-
-        $sort = isset($_POST['sort']) ? strval($_POST['sort']) : 'ID';
-        $order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
-        $this->load->model('usuarios/operaciones_model');
-        $result = array();
-        //$result["total"] = $this->roles_model->num_registros();
-        $result = $this->operaciones_model->obtener($rows,$offset,$sort,$order);
-        echo json_encode($result);
-    }
-
-    /**
-     * Recuperar los datos desde la BD en formato JSON
-     * 
-     * @return void
-     */
-    function objetos_data() {
-        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-        $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
-        $offset = ($page-1)*$rows;
-
-        $sort = isset($_POST['sort']) ? strval($_POST['sort']) : 'ID';
-        $order = isset($_POST['order']) ? strval($_POST['order']) : 'asc';
-        $this->load->model('usuarios/objetos_model');
-        $result = array();
-        //$result["total"] = $this->roles_model->num_registros();
-        $result = $this->objetos_model->obtener($rows,$offset,$sort,$order);
+        $result = $this->$modelo->obtener($rows,$offset,$sort,$order);
         echo json_encode($result);
     }
 
@@ -145,7 +140,7 @@ class MY_Admin_Ctrl extends CI_Controller
     {
         echo 'Inicio prueba de herencia<br>';
         $modelo = $this->router->class.'_model';
-        $this->load->model('usuarios/'.$modelo);
+        $this->load->model($this->obtener_nombre_modulo().$modelo);
         $this->$modelo->establecer_nombre_tabla($this->router->class);
         echo $this->$modelo->obtener_nombre_tabla();
 
@@ -170,7 +165,7 @@ class MY_Admin_Ctrl extends CI_Controller
     function obtener_data()
     {
         $modelo = $this->router->class.'_model';
-        $this->load->model('usuarios/'.$modelo);
+        $this->load->model($this->obtener_nombre_modulo().$modelo);
         $this->$modelo->establecer_nombre_tabla($this->router->class);
 
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
@@ -194,9 +189,8 @@ class MY_Admin_Ctrl extends CI_Controller
     function actualizar_data()
     {
         $modelo = $this->router->class.'_model';
-        $this->load->model('usuarios/'.$modelo);
+        $this->load->model($this->obtener_nombre_modulo().$modelo);
         $this->$modelo->establecer_nombre_tabla($this->router->class);
-
         //Recuperar los errores desde el modelo
         $resultados = $this->$modelo->guardar_actualizar();
         if ($resultados === TRUE)
@@ -211,5 +205,5 @@ class MY_Admin_Ctrl extends CI_Controller
     }
 }
 
-/* End of file MY_Usuarios_Ctrl.php */
-/* Location: ./application/core/MY_Usuarios_Ctrl.php */
+/* End of file MY_Admin_Ctrl.php */
+/* Location: ./application/core/MY_Admin_Ctrl.php */

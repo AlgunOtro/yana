@@ -18,14 +18,20 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Modelo Permisos
  *
- * Representa los datos de los roles. Opera con las siguientes tablas:
+ * Este modelo gestiona los datos de los permisos de la sesión actual. Opera
+ * con las siguientes tablas:
  * - roles
+ * - permisos
+ * - objetos
+ * - operaciones
+ * - roles_permisos
  *
  * @package Atuk\Usuarios
  * @author Byron Oña
  * @version v1.0.0
  */
-class Permisos_model extends MY_Admin_Model {
+class Permisos_model extends MY_Admin_Model
+{
 
     public $limit;
     public $offset;
@@ -35,9 +41,16 @@ class Permisos_model extends MY_Admin_Model {
     private $table_name_operaciones = 'operaciones';
     private $table_name_roles_permisos = 'roles_permisos';
 
-    function __construct() {
+    /**
+     * Constructor
+     *
+     * Carga la clase padre MY_Admin_Model
+     *
+     * @return  void
+     */
+    function __construct()
+    {
         parent::__construct();
-        log_message('debug', 'Clase Modelo Permisos Iniciado');
     }
 
     /**
@@ -150,59 +163,100 @@ class Permisos_model extends MY_Admin_Model {
      * Si falla
      * @return string
      */
-    public function guardar_actualizar() {
+    public function guardar_actualizar()
+	{
+        var_dump(1);
         //Recibir datos por POST
         $resultado = '';
         $id = isset($_POST['id']) ? $this->security->xss_clean(intval($_POST['id'])) : 0;
-        $objeto = isset($_POST['objeto']) ? $this->security->xss_clean(trim(mb_strtoupper(strval($_POST['objeto'])))) : '';
+        $objeto = isset($_POST['objeto']) ? $this->security->xss_clean(trim(ucfirst(strval($_POST['objeto'])))) : '';
         $operacion = isset($_POST['operacion']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['operacion'])))) : '';
         $rol = isset($_POST['rol']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['rol'])))) : '';
+        $descripcion = isset($_POST['descripcion']) ? $this->security->xss_clean(trim(mb_strtolower(strval($_POST['descripcion'])))) : '';
         $esNuevo = isset($_POST['isNewRecord']) ? $this->security->xss_clean(mb_strtolower(strval($_POST['isNewRecord']))) : '';
+        unset($_POST['id']);
+        unset($_POST['isNewRecord']);
 
         $id_objeto = $this->obtener_id_objeto($objeto);
-        if( $id_objeto ) {
+        if ($id_objeto)
+        {
+            var_dump(2);
             $resultado .= 'El objeto existe. ';
             $id_operacion = $this->obtener_id_operacion($operacion);
-            if( $id_operacion ) {
+            if ($id_operacion)
+            {
+                var_dump(3);
                 $resultado .= 'La operacion existe. ';
                 $this->load->model('usuarios/roles_model');
+                $this->roles_model->establecer_nombre_tabla('roles');
+				$rol = array('rol' => $rol);
                 $id_rol = $this->roles_model->obtener_id($rol);
-                if( $id_rol ) {
+                if ($id_rol)
+                {
                     $resultado .= 'El rol existe. ';
                     $id_permiso = $this->obtener_id_permiso($id_objeto,$id_operacion);
-                    if( $id_permiso ) {
+                    if ($id_permiso)
+                    {
                         $resultado .= 'El permiso existe. ';
-                    } else {
+                        //Preparar UPDATE a la BD
+                        $data = array('descripcion' => $descripcion);
+                        $this->db->where('fk_objeto_id', $id_objeto);
+                        $this->db->where('fk_operacion_id', $id_operacion);
+                        $query = $this->db->update($this->table_name_permisos, $data);
+                        //Destruir la variable utilizada para hacer el UPDATE
+                        unset($data['descripcion']);
+                        //Ejecutar si el INSERT fue correcto
+                        if ( ! $query)
+                        {
+                            $resultado .= 'No se actualizó la descripción del permiso. ';
+                        }
+                    }
+                    else
+                    {
                         $resultado .= 'El permiso no existe. ';
                         //Preparar INSERT a la BD
-                        $data = array('fk_objeto_id' => $id_objeto,'fk_operacion_id' => $id_operacion);
+                        $data = array('fk_objeto_id' => $id_objeto,'fk_operacion_id' => $id_operacion,'descripcion' => $descripcion);
                         $query = $this->db->insert($this->table_name_permisos, $data);
                         //Destruir la variable utilizada para hacer el INSERT
                         unset($data['fk_objeto_id']);
                         unset($data['fk_operacion_id']);
+                        unset($data['descripcion']);
                         //Ejecutar si el INSERT fue correcto
-                        if( $query ) {
+                        if ($query)
+                        {
                             //Obtener ID de permiso insertado
                             $id_permiso = $this->obtener_id_permiso($id_objeto,$id_operacion);
-                        } else {
+                        }
+                        else
+                        {
                             $resultado .= 'No se guardó el permiso. ';
                         }
                     }
-                    if( $id_permiso) {
+                    if ($id_permiso)
+                    {
                         $existe_rol_permiso = $this->existe_rol_permiso($id_rol,$id_permiso);
-                        if($existe_rol_permiso) {
+                        if ($existe_rol_permiso)
+                        {
                             $resultado .= 'El rol-permiso existe. ';
-                        } else {
+                        }
+                        else
+                        {
                             $resultado .= 'El rol-permiso no existe. ';
                             //Preparar INSERT o UPDATE a la BD
                             $data = array('fk_rol_id' => $id_rol,'fk_permiso_id' => $id_permiso);
-                            if( $esNuevo ) {
+                            if ($esNuevo)
+                            {
                                 $query = $this->db->insert($this->table_name_roles_permisos, $data);
-                            } else {
-                                if( $id ) {
+                            }
+                            else
+                            {
+                                if ($id)
+                                {
                                     $this->db->where('id', $id);
                                     $query = $this->db->update($this->table_name_roles_permisos, $data);
-                                } else {
+                                }
+                                else
+                                {
                                     // 0. El ID del rol-permiso no existe
                                     $query = FALSE;
                                     $resultado .= 'El ID rol-permiso es incorrecto. ';
@@ -212,24 +266,34 @@ class Permisos_model extends MY_Admin_Model {
                             unset($data['fk_objeto_id']);
                             unset($data['fk_operacion_id']);
                             //Retornar TRUE si el INSERT o UPDATE fue correcto
-                            if( $query ) {
+                            if ($query)
+                            {
                                 return $query;
                             }
                         }
-                    } else {
+                    }
+                    else
+                    {
                         // 0. El ID del permiso no existe
                         $resultado .= 'El permiso no existe. ';
                     }
                     return $resultado;
-                } else {
+                }
+                else
+                {
+                    var_dump(4);
                     $resultado .= 'El rol no existe. ';
                     return $resultado;
                 }
-            } else {
+            }
+            else
+            {
                 $resultado .= 'La operacion no existe. ';
                 return $resultado;
             }
-        } else {
+        }
+        else
+        {
             $resultado .= 'El objeto no existe. ';
             return $resultado;
         }

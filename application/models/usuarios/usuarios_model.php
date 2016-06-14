@@ -1,13 +1,32 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
- * Usuarios_model
+ * Archivo usuarios_model.php
  *
- * Representa los datos de Usuarios
+ * Contiene la Clase Usuarios_model que extiende de la Clase MY_Admin_Model
  *
+ * @package Atuk\Usuarios
  * @author Byron Oña
- *
+ * @copyright © 2015-2016 Byron Oña
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version v1.0.0
  */
-class Usuarios_model extends CI_Model {
+
+/** No acceso directo */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/**
+ * Modelo Roles
+ *
+ * Representa los datos de los roles. Opera con las siguientes tablas:
+ * - roles
+ *
+ * @package Atuk\Usuarios
+ * @author Byron Oña
+ * @version v1.0.0
+ */
+class Usuarios_model extends MY_Admin_Model
+{
 
     public $limit;
     public $offset;
@@ -15,7 +34,15 @@ class Usuarios_model extends CI_Model {
     private $table_name_usuarios_roles = 'usuarios_roles';
     private $table_name_roles = 'roles';
 
-    function __construct() {
+    /**
+     * Constructor
+     *
+     * Carga la clase padre MY_Admin_Model
+     *
+     * @return  void
+     */
+    function __construct()
+    {
         parent::__construct();
     }
 
@@ -24,17 +51,20 @@ class Usuarios_model extends CI_Model {
      * 
      * @return array
      */
-    public function obtener() {
+    public function obtener()
+    {
         if( $this->config->item("tiene_directorio_activo") ){
-            echo 'siga como antes';
+            //echo 'siga como antes';
             $this->campo_usuario = 'USUARIO';
+            $this->campo_estado = 'estado';
         } else {
-            echo 'nada';
+            //echo 'nada';
             $this->table_name_usuarios = 'USERS';
             $this->campo_usuario = 'username';
+            $this->campo_estado = 'activated';
             $this->directorio_activo = 0;
         }
-        $resultado = $this->db->select('t0.id,t0.usuario,t2.rol,t0.estado')
+        $resultado = $this->db->select('t0.id,t0.'.$this->campo_usuario.',t2.rol,t0.'.$this->campo_estado)
         ->from($this->table_name_usuarios.' t0')
         ->join($this->table_name_usuarios_roles.' t1','t0.id = t1.fk_usuario_id','left')
         ->join($this->table_name_roles.' t2','t1.fk_rol_id = t2.id','left')

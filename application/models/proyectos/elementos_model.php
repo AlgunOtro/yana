@@ -7,7 +7,7 @@
  * @author Byron Oña
  *
  */
-class Elementos_model extends CI_Model {
+class Elementos_model extends MY_Admin_Model {
 
     public $limit;
     public $offset;
@@ -23,7 +23,6 @@ class Elementos_model extends CI_Model {
     function __construct()
     {
         parent::__construct();
-        log_message('debug', 'Modelo Elemento Iniciado');
     }
 
     /**

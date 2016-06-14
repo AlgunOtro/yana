@@ -7,7 +7,7 @@
  * @author Byron Oña
  *
  */
-class Proyectos_model extends CI_Model {
+class Proyectos_model extends MY_Admin_Model {
 
     public $limit;
     public $offset;

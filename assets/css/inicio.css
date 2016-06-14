@@ -9,7 +9,7 @@
   -ms-font-size-adjust: 0.58;
 }
 body {
-  background: url("../imagenes/fondo1.png") repeat;
+  background: url("../imagenes/fondo.png") repeat;
   background-size: 100%;
   -webkit-background-size: cover;
   -moz-background-size: cover;

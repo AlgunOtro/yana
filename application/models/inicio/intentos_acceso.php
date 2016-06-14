@@ -1,29 +1,57 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * Archivo intentos_acceso.php
+ *
+ * Contiene la Clase Intentos_acceso que extiende de la Clase CI_Model
+ *
+ * @package Atuk\Inicio
+ * @author Byron Oña
+ * @copyright © 2015-2016 Byron Oña
+ * @license GPL
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version v1.0.0
+ */
+
+/** No acceso directo */
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Intentos_acceso
+ * Modelo Intentos acceso
  *
- * This model serves to watch on all attempts to login on the site
- * (to protect the site from brute-force attack to user database)
+ * Este modelo gestiona todos los intentos fallido de inicio de sesión a
+ * la aplicación, protege a la aplicación de ataque de fuerza bruta a
+ * los usuarios de la base de datos. Opera con las siguientes tablas:
+ * - intentos_acceso
  *
- * @author	Byron Oña
+ * @package Atuk\Inicio
+ * @author Byron Oña
+ * @version v1.0.0
  */
 class Intentos_acceso extends CI_Model
 {
 	private $table_name = 'intentos_acceso';
 
+	/**
+	 * Constructor
+	 *
+	 * Carga la instancia de Codeigniter y establece el prefijo
+	 * en el nombre de las tablas
+	 *
+     * @return	void
+	 */
 	function __construct() {
 		parent::__construct();
-		log_message('debug', 'Clase Modelo Intentos_acceso Iniciado');
 		$ci =& get_instance();
 		$this->table_name = $ci->config->item('db_table_prefix', 'tank_auth').$this->table_name;
 	}
 
 	/**
+	 * Obtener cantidad intentos
+	 *
 	 * Get number of attempts to login occured from given IP-address or login
 	 *
-	 * @param	string
-	 * @param	string
+	 * @param	string	$direccion_ip	Dirección IP
+	 * @param	string	$user			Nombre del usuario actual
 	 * @return	int
 	 */
 	function obtener_cantidad_intentos($direccion_ip, $user) {
@@ -52,10 +80,12 @@ class Intentos_acceso extends CI_Model
 	}
 
 	/**
+	 * Incrementar intento
+	 *
 	 * Increase number of attempts for given IP-address and login
 	 *
-	 * @param	string
-	 * @param	string
+	 * @param	string	$direccion_ip	Dirección IP
+	 * @param	string	$user			Nombre del usuario actual
 	 * @return	bool
 	 */
 	function incrementar_intento($direccion_ip, $user) {
@@ -72,12 +102,14 @@ class Intentos_acceso extends CI_Model
 	}
 
 	/**
+	 * Limpiar intentos
+	 *
 	 * Clear all attempt records for given IP-address and login.
 	 * Also purge obsolete login attempts (to keep DB clear).
 	 *
-	 * @param	string
-	 * @param	string
-	 * @param	int
+	 * @param	string	$direccion_ip	Dirección IP
+	 * @param	string	$user			Nombre del usuario actual
+	 * @param	int		$expire_period	Tiempo de expiración de intentos fallidos
 	 * @return	bool
 	 */
 	function limpiar_intentos($direccion_ip, $user, $expire_period = 86400) {

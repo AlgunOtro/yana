@@ -44,7 +44,7 @@ class Tareas extends CI_Controller {
         }
       }
       $this->load->view('plantilla/cabecera');
-      $this->load->view('proyectos/tareas_view',$data);
+      $this->load->view('proyectos/tareas',$data);
       $this->load->view('plantilla/pie');
     }
 
